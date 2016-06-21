@@ -74,5 +74,8 @@ module.exports = function createMesh(subdivisions){//: f2.Float2Type = f2.vec(12
 		indices: indices,
 		manyVertices: manyVertices,
 		manyTriangles: manyTriangles,
+		toString: function(){
+			return `{plane mesh, dimensions (${subdivisions}), triangles ${manyTriangles}, vertices ${manyVertices}}`
+		},
 	}
 }
