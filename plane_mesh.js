@@ -1,7 +1,7 @@
 
 const f2 = require('vectypes-float2')
 
-module.exports = function createMesh(subdivisions: f2.Float2Type = f2.vec(128, 128)) {
+module.exports = function createMesh(subdivisions){//: f2.Float2Type = f2.vec(128, 128)) {
 	subdivisions.assertInt()
 	if (subdivisions.x < 1 || subdivisions.y < 1) {
 		throw new Error('subdivisions must be at least 1x1');
