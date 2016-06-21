@@ -1,8 +1,28 @@
 
 const f2 = require('vectypes-float2')
 
-module.exports = function createMesh(subdivisions){//: f2.Float2Type = f2.vec(128, 128)) {
-	f2.as(subdivisions).assertInts()
+export class PlaneMesh{
+	vertices: Float32Array;
+	indices: Uint16Array;
+	manyVertices: number;
+	manyTriangles: number;
+	dimensions: f2.Float2;
+
+	constructor(vertices, indices, manyVertices, manyTriangles, dimensions){
+		this.vertices = vertices;
+		this.indices = indices;
+		this.manyTriangles = manyTriangles;
+		this.manyVertices = manyVertices;
+		this.dimensions = dimensions;
+	}
+	toString(){
+		return `{plane mesh, dimensions (${this.dimensions}), triangles ${this.manyTriangles}, vertices ${this.manyVertices}}`
+	}
+}
+export function create(subdivisions: f2.Float2Type = f2.vec(8, 8)) {
+	subdivisions = f2.as(subdivisions);
+
+	subdivisions.assertInts()
 	if (subdivisions.x < 1 || subdivisions.y < 1) {
 		throw new Error('subdivisions must be at least 1x1');
 	}
@@ -69,13 +89,5 @@ module.exports = function createMesh(subdivisions){//: f2.Float2Type = f2.vec(12
 		}
 	}
 
-	return {
-		vertices: vertices,
-		indices: indices,
-		manyVertices: manyVertices,
-		manyTriangles: manyTriangles,
-		toString: function(){
-			return `{plane mesh, dimensions (${subdivisions}), triangles ${manyTriangles}, vertices ${manyVertices}}`
-		},
-	}
+	return new PlaneMesh(vertices, indices, manyVertices, manyTriangles, subdivisions)
 }
