@@ -1,0 +1,15 @@
+{
+  "name": "plane-mesh",
+  "version": "0.1.0",
+  "description": "",
+  "author": "Liam Doherty",
+  "dependencies": {
+    "vectypes-float2": "^0.1.0"
+  },
+  "main": "plane_mesh",
+  "devDependencies": {
+    "babel-eslint": "^6.0.4",
+    "eslint": "^2.13.0",
+    "eslint-plugin-flow-vars": "^0.4.0"
+  }
+}
