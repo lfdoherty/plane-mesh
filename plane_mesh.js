@@ -18,6 +18,22 @@ export class PlaneMesh{
 	toString(){
 		return `{plane mesh, dimensions (${this.dimensions}), triangles ${this.manyTriangles}, vertices ${this.manyVertices}}`
 	}
+	toBinary(w){
+		w.putNumber(this.dimensions.x)
+		w.putNumber(this.dimensions.y)
+		w.putInt(this.manyVertices);
+		w.putBuffer(this.vertices.buffer)
+		w.putInt(this.manyTriangles);
+		w.putBuffer(this.indices.buffer)
+	}
+}
+export function fromBinary(r): PlaneMesh {
+	const dimensions = f2.vec(r.takeNumber(), r.takeNumber());
+	const manyVertices = r.takeInt()
+	const vertices = new Float32Array(r.takeBuffer(Float32Array.BYTES_PER_ELEMENT * 3 * manyVertices));
+	const manyTriangles = r.takeInt()
+	const indices = new Uint16Array(r.takeBuffer(Uint16Array.BYTES_PER_ELEMENT * 3 * manyTriangles));
+	return new PlaneMesh(vertices, indices, manyVertices, manyTriangles, dimensions);
 }
 export function create(subdivisions: f2.Float2Type = f2.vec(8, 8)) {
 	subdivisions = f2.as(subdivisions);
