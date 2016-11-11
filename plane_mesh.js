@@ -9,6 +9,9 @@ export class PlaneMesh{
 	dimensions: f2.Float2;
 
 	constructor(vertices, indices, manyVertices, manyTriangles, dimensions){
+		dimensions = f2.as(dimensions)
+		if(!dimensions.isInts()) throw new Error('dimensions must be integers');
+
 		this.vertices = vertices;
 		this.indices = indices;
 		this.manyTriangles = manyTriangles;
@@ -19,8 +22,8 @@ export class PlaneMesh{
 		return `{plane mesh, dimensions (${this.dimensions}), triangles ${this.manyTriangles}, vertices ${this.manyVertices}}`
 	}
 	toBinary(w){
-		w.putNumber(this.dimensions.x)
-		w.putNumber(this.dimensions.y)
+		w.putInt(this.dimensions.x)
+		w.putInt(this.dimensions.y)
 		w.putInt(this.manyVertices);
 		w.putBuffer(this.vertices.buffer)
 		w.putInt(this.manyTriangles);
@@ -28,11 +31,11 @@ export class PlaneMesh{
 	}
 }
 export function fromBinary(r): PlaneMesh {
-	const dimensions = f2.vec(r.takeNumber(), r.takeNumber());
+	const dimensions = f2.vec(r.takeInt(), r.takeInt());
 	const manyVertices = r.takeInt()
-	const vertices = new Float32Array(r.takeBuffer(Float32Array.BYTES_PER_ELEMENT * 3 * manyVertices));
+	const vertices = r.takeArrayFloat(manyVertices * 3);//Float32Array.BYTES_PER_ELEMENT * 3 * manyVertices));
 	const manyTriangles = r.takeInt()
-	const indices = new Uint16Array(r.takeBuffer(Uint16Array.BYTES_PER_ELEMENT * 3 * manyTriangles));
+	const indices = r.takeArrayUShort(manyTriangles * 3);//new Uint16Array(r.takeBuffer(Uint16Array.BYTES_PER_ELEMENT * 3 * manyTriangles));
 	return new PlaneMesh(vertices, indices, manyVertices, manyTriangles, dimensions);
 }
 export function create(subdivisions: f2.Float2Type = f2.vec(8, 8)) {
@@ -61,15 +64,15 @@ export function create(subdivisions: f2.Float2Type = f2.vec(8, 8)) {
 		let index = 0;
 		for (let y = 0; y <= subdivisions.y; ++y) {
 			for (let x = 0; x <= subdivisions.x; ++x) {
-				vertices[index++] = ((x / subdivisions.x) * 2) - 1;
-				vertices[index++] = ((y / subdivisions.y) * 2) - 1;
+				vertices[index++] = x / subdivisions.x;//) * 2) - 1;
+				vertices[index++] = y / subdivisions.y;//) * 2) - 1;
 				vertices[index++] = 0;
 			}
 			//middle row
 			if (y < subdivisions.y) {
 				for (let x = 0; x < subdivisions.x; ++x) {
-					vertices[index++] = (((x + .5) / subdivisions.x) * 2) - 1;
-					vertices[index++] = (((y + .5) / subdivisions.y) * 2) - 1;
+					vertices[index++] = (x + .5) / subdivisions.x//) * 2) - 1;
+					vertices[index++] = (y + .5) / subdivisions.y//) * 2) - 1;
 					vertices[index++] = 0;
 				}
 			}

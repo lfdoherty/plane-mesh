@@ -1,7 +1,7 @@
 {
-  "name": "plane-mesh",
-  "version": "0.1.4",
-  "description": "",
+  "name": "@lfdoherty/plane-mesh",
+  "version": "0.2.0",
+  "description": "Creates a 3D mesh on the z=0 plane, with x and y between 0 and 1.",
   "author": "Liam Doherty",
   "dependencies": {
     "vectypes-float2": "^0.1.0"
